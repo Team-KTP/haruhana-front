@@ -5,23 +5,189 @@
 @layer base {
   body {
     @apply bg-gray-50 text-gray-900;
+    font-family: 'Pretendard Variable', 'Inter', system-ui, -apple-system, sans-serif;
+    font-variation-settings: 'wght' 400;
+  }
+
+  /* Screen reader only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
 @layer components {
+  /* ========== Button Variants ========== */
+
+  /* Primary Button - Main CTA */
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors;
+    @apply bg-gradient-primary hover:shadow-lg hover:scale-102 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-150;
   }
 
-  .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors;
+  .btn-primary:active {
+    @apply scale-[0.98];
   }
+
+  .btn-primary:disabled {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+  }
+
+  /* Secondary Button - Secondary actions */
+  .btn-secondary {
+    @apply bg-secondary-500 hover:bg-secondary-600 hover:shadow-lg hover:scale-102 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-150;
+  }
+
+  .btn-secondary:active {
+    @apply scale-[0.98];
+  }
+
+  /* Ghost Button - Minimal actions */
+  .btn-ghost {
+    @apply bg-transparent hover:bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-xl transition-all duration-150;
+  }
+
+  /* Outline Button - Border actions */
+  .btn-outline {
+    @apply border-2 border-primary-500 hover:bg-primary-50 text-primary-600 font-medium py-3 px-6 rounded-xl transition-all duration-150;
+  }
+
+  /* Button Sizes */
+  .btn-sm {
+    @apply py-2 px-4 text-sm font-medium;
+  }
+
+  .btn-lg {
+    @apply py-4 px-8 text-lg font-semibold;
+  }
+
+  /* ========== Input Fields ========== */
 
   .input-field {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all;
+    @apply w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:border-transparent outline-none transition-all duration-150;
   }
 
+  .input-field::placeholder {
+    @apply text-gray-400;
+  }
+
+  .input-field:disabled {
+    @apply bg-gray-100 cursor-not-allowed opacity-60;
+  }
+
+  /* Input Error State */
+  .input-error {
+    @apply border-error-500 focus:ring-error-500;
+  }
+
+  /* Input Sizes */
+  .input-sm {
+    @apply py-2 px-3 text-sm;
+  }
+
+  .input-lg {
+    @apply py-4 px-5 text-lg;
+  }
+
+  /* ========== Card Variants ========== */
+
+  /* Default Card */
   .card {
-    @apply bg-white rounded-lg shadow-md p-6;
+    @apply bg-white rounded-2xl shadow-md hover:shadow-xl p-6 transition-all duration-300;
+  }
+
+  /* Small Card */
+  .card-sm {
+    @apply bg-white rounded-xl shadow-sm p-4;
+  }
+
+  /* Large Card */
+  .card-lg {
+    @apply bg-white rounded-3xl shadow-lg p-8;
+  }
+
+  /* Interactive Card */
+  .card-interactive {
+    @apply card cursor-pointer;
+  }
+
+  .card-interactive:hover {
+    @apply -translate-y-1;
+  }
+
+  .card-interactive:active {
+    @apply -translate-y-0.5;
+  }
+
+  /* ========== Badge ========== */
+
+  .badge {
+    @apply inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full;
+  }
+
+  .badge-primary {
+    @apply bg-primary-50 text-primary-600;
+  }
+
+  .badge-success {
+    @apply bg-success-50 text-success-600;
+  }
+
+  .badge-warning {
+    @apply bg-warning-50 text-warning-600;
+  }
+
+  .badge-error {
+    @apply bg-error-50 text-error-600;
+  }
+
+  /* ========== Typography ========== */
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-primary;
+  }
+
+  /* ========== Modal ========== */
+
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+  }
+
+  .modal {
+    @apply bg-white rounded-3xl shadow-2xl max-w-lg w-11/12 p-8 animate-scale-in;
+  }
+
+  /* ========== Focus States ========== */
+
+  .focus-ring:focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  }
+
+  /* ========== Hover Effects ========== */
+
+  .hover-lift {
+    @apply transition-all duration-150;
+  }
+
+  .hover-lift:hover {
+    @apply scale-102 shadow-lg;
   }
 }
