@@ -1,7 +1,13 @@
 export interface ApiResponse<T> {
-  success: boolean;
+  result: 'SUCCESS' | 'ERROR';
   data: T;
-  message?: string;
+  error?: ErrorMessage;
+}
+
+export interface ErrorMessage {
+  code: string;
+  message: string;
+  data?: unknown;
 }
 
 export interface PaginatedResponse<T> {
@@ -14,4 +20,4 @@ export interface PaginatedResponse<T> {
 
 export type Difficulty = 'EASY' | 'MEDIUM' | 'HARD';
 
-export type UserRole = 'GUEST' | 'MEMBER';
+export type UserRole = 'ROLE_GUEST' | 'ROLE_MEMBER';
