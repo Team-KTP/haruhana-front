@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -39,12 +39,13 @@ client.interceptors.response.use(
 
         // 리프레시 토큰으로 새 액세스 토큰 발급
         const response = await axios.post(
-          `${import.meta.env.VITE_API_URL || 'http://localhost:8080/api'}/auth/refresh`,
+          `${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/v1/auth/reissue`,
           { refreshToken }
         );
 
-        const { accessToken } = response.data;
+        const { accessToken, refreshToken: newRefreshToken } = response.data.data;
         localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', newRefreshToken);
 
         // 원래 요청 재시도
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
