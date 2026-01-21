@@ -1,42 +1,39 @@
-import { ButtonHTMLAttributes, ReactNode } from 'react';
+import React, { ButtonHTMLAttributes, ReactNode } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
-  isLoading?: boolean;
+  children: ReactNode;
 }
 
-export default function Button({
+export const Button: React.FC<ButtonProps> = ({
   children,
   variant = 'primary',
   size = 'md',
   fullWidth = false,
-  isLoading = false,
   className = '',
-  disabled,
   ...props
-}: ButtonProps) {
-  const baseClass = 'btn-' + variant;
-  const sizeClass = size === 'sm' ? 'btn-sm' : size === 'lg' ? 'btn-lg' : '';
-  const widthClass = fullWidth ? 'w-full' : '';
-  const disabledClass = disabled || isLoading ? 'opacity-50 cursor-not-allowed' : '';
-
+}) => {
+  const baseStyles = "inline-flex items-center justify-center rounded-xl font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+  const variants = {
+    primary: "bg-haru-500 text-white hover:bg-haru-600 focus:ring-haru-500",
+    secondary: "bg-haru-100 text-haru-800 hover:bg-haru-200 focus:ring-haru-500",
+    outline: "border-2 border-slate-200 text-slate-700 hover:border-haru-500 hover:text-haru-600 focus:ring-haru-500",
+    ghost: "text-slate-500 hover:text-haru-600 hover:bg-haru-50",
+  };
+  const sizes = {
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-5 py-2.5 text-base",
+    lg: "px-6 py-3.5 text-lg",
+  };
+  const widthClass = fullWidth ? "w-full" : "";
   return (
     <button
-      className={`${baseClass} ${sizeClass} ${widthClass} ${disabledClass} ${className}`.trim()}
-      disabled={disabled || isLoading}
+      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${widthClass} ${className}`}
       {...props}
     >
-      {isLoading ? (
-        <div className="flex items-center justify-center gap-2">
-          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          <span>처리 중...</span>
-        </div>
-      ) : (
-        children
-      )}
+      {children}
     </button>
   );
-}
+};

@@ -22,8 +22,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className={`input-field ${sizeClass} ${errorClass} ${className}`.trim()}
           {...props}
         />
-        {error && <p className="mt-1 text-sm text-error-600">{error}</p>}
-        {helperText && !error && <p className="mt-1 text-sm text-gray-500">{helperText}</p>}
+        {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+        {helperText && !error && <p className="mt-2 text-xs text-gray-500">{helperText}</p>}
       </div>
     );
   }
