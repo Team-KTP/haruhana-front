@@ -1,0 +1,12 @@
+{
+  "name": "HaruHaru - 매일 1문제",
+  "short_name": "HaruHaru",
+  "description": "매일 1문제로 꾸준함을 기르는 학습 서비스",
+  "theme_color": "#3b82f6",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": []
+}
