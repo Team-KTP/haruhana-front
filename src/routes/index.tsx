@@ -7,6 +7,8 @@ import ProblemSolve from '../pages/ProblemSolve';
 import ProtectedRoute from '../components/features/auth/ProtectedRoute';
 import AuthRedirect from '../components/features/auth/AuthRedirect';
 import MyPage from '../pages/MyPage';
+// import Settings from '../pages/Settings';
+
 
 // 임시 컴포넌트 (나중에 실제 페이지로 교체)
 const TempPage = ({ title }: { title: string }) => (
@@ -53,14 +55,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute requireRole="ROLE_MEMBER">
-            <TempPage title="설정" />
-          </ProtectedRoute>
-        }
-      />
 
       {/* 내 정보 페이지 */}
       <Route
@@ -71,6 +65,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      {/* 필요시 Settings 라우트 추가 */}
 
       {/* 404 리다이렉트 */}
       <Route path="*" element={<Navigate to="/" replace />} />

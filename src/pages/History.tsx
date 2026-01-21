@@ -31,7 +31,7 @@ export default function History() {
     const routes: Record<string, string> = {
       dashboard: '/',
       history: '/records',
-      profile: '/settings',
+      profile: '/mypage',
     };
     navigate(routes[path] || '/');
   };

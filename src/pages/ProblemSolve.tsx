@@ -1,28 +1,32 @@
-// 간단한 마크다운 파서 (AI 답변용)
+// 간단한 마크다운 파서 (AI 답변용, 가독성 개선)
 const parseMarkdown = (text: string) => {
-  const paragraphs = text.split('\n\n');
+  const paragraphs = text.split(/\n\n+/);
   return paragraphs.map((paragraph, idx) => {
     if (paragraph.startsWith('## ')) {
-      return <h4 key={idx} className="font-bold text-white mt-4 mb-2">{paragraph.replace('## ', '')}</h4>;
-    } else if (paragraph.startsWith('```')) {
-      const code = paragraph.replace(/```jsx\n|```js\n|```typescript\n|```\n|```$/g, '');
       return (
-        <pre key={idx} className="bg-slate-900 p-3 rounded-lg overflow-x-auto text-xs">
+        <h4 key={idx} className="font-bold text-haru-200 mt-5 mb-2 text-base tracking-tight">
+          {paragraph.replace('## ', '')}
+        </h4>
+      );
+    } else if (paragraph.startsWith('```')) {
+      const code = paragraph.replace(/```[a-zA-Z]*\n?|```$/g, '');
+      return (
+        <pre key={idx} className="bg-slate-900 p-4 rounded-xl overflow-x-auto text-xs text-haru-100 border border-slate-700 mb-2">
           <code>{code}</code>
         </pre>
       );
-    } else if (paragraph.startsWith('- ')) {
+    } else if (paragraph.split('\n').some(line => line.startsWith('- '))) {
       return (
-        <ul key={idx} className="list-disc list-inside space-y-1">
+        <ul key={idx} className="list-disc list-inside space-y-1 pl-4">
           {paragraph.split('\n').filter(line => line.startsWith('- ')).map((item, i) => (
-            <li key={i} className="text-slate-300">{item.replace('- ', '')}</li>
+            <li key={i} className="text-haru-100 leading-relaxed">{item.replace('- ', '')}</li>
           ))}
         </ul>
       );
     } else if (paragraph.trim().startsWith('**') && paragraph.trim().endsWith('**')) {
-      return <p key={idx} className="font-bold text-white">{paragraph.replace(/\*\*/g, '')}</p>;
+      return <p key={idx} className="font-bold text-haru-100 text-base mb-1">{paragraph.replace(/\*\*/g, '')}</p>;
     }
-    return <p key={idx} className="text-slate-300">{paragraph}</p>;
+    return <p key={idx} className="text-haru-100 leading-relaxed text-[15px]">{paragraph}</p>;
   });
 };
 import { useState, useEffect } from 'react';
@@ -64,7 +68,7 @@ export default function ProblemSolve() {
     const routes: Record<string, string> = {
       dashboard: '/',
       history: '/records',
-      profile: '/settings',
+      profile: '/mypage',
     };
     navigate(routes[path] || '/');
   };
@@ -117,7 +121,7 @@ export default function ProblemSolve() {
 
   return (
     <Layout user={user} onNavigate={handleNavigate} onLogout={logout}>
-      <div className="space-y-6 pb-10">
+      <div className="space-y-6 pb-32 sm:pb-10">
         {/* Back button */}
         <div className="flex items-center gap-2">
           <button onClick={handleBack} className="p-2 -ml-2 text-slate-400 hover:text-slate-600 transition-colors">
@@ -145,9 +149,26 @@ export default function ProblemSolve() {
               </span>
             )}
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 leading-tight">{problemDetail.title}</h2>
-          <Card className="!p-4">
-            <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap">{problemDetail.description}</p>
+          <h2 className="text-2xl font-bold text-slate-800 leading-tight flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-haru-50 text-haru-500 mr-1">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+              </svg>
+            </span>
+            {problemDetail.title}
+          </h2>
+          <Card className="!p-0 bg-gradient-to-br from-haru-50/80 to-slate-50/80 border-0 shadow-md">
+            <div className="px-4 py-3">
+              <div className="mb-2 flex items-center gap-2">
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-haru-400 animate-pulse"></span>
+                <span className="text-xs text-haru-500 font-semibold tracking-wide">문제 설명</span>
+              </div>
+              <div className="border-b border-slate-200 mb-3"></div>
+              <div className="prose prose-h4:text-haru-600 prose-p:text-slate-900 prose-ul:text-slate-900 prose-li:marker:text-haru-400 prose-code:bg-slate-100 prose-code:text-xs prose-code:rounded prose-code:px-1 prose-code:py-0.5 prose-pre:bg-slate-900 prose-pre:text-haru-100 prose-pre:rounded-xl prose-pre:p-4 prose-pre:border prose-pre:border-slate-700 max-w-none text-[15px] leading-relaxed">
+                {parseMarkdown(problemDetail.description)}
+              </div>
+            </div>
           </Card>
         </section>
 
@@ -187,17 +208,15 @@ export default function ProblemSolve() {
 
             {/* AI Mentor Section */}
             {showAIAnswer && (
-              <div className="bg-slate-800 text-white rounded-2xl p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4 text-haru-300">
+              <div className="bg-slate-800 rounded-2xl p-7 shadow-2xl border border-slate-700">
+                <div className="flex items-center gap-2 mb-5 text-haru-300">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
-                  <h3 className="font-bold text-sm">AI 멘토의 조언</h3>
+                  <h3 className="font-bold text-base tracking-tight">AI 멘토의 조언</h3>
                 </div>
-                <div className="prose prose-invert prose-sm max-w-none text-slate-300">
-                  <div className="space-y-3 text-sm leading-relaxed">
-                    {parseMarkdown(showAIAnswer)}
-                  </div>
+                <div className="space-y-4">
+                  {parseMarkdown(showAIAnswer)}
                 </div>
               </div>
             )}
