@@ -22,6 +22,8 @@ export interface MemberCreateRequest {
   loginId: string;
   password: string;
   nickname: string;
+  categoryTopicId: number;
+  difficulty: Difficulty;
 }
 
 // 회원 프로필 응답

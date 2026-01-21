@@ -1,25 +1,5 @@
 import { Difficulty } from './common';
 
-// 카테고리 (사용 안함 - 백엔드에 카테고리 조회 API 없음)
-export interface Category {
-  id: number;
-  name: string;
-  level: number;
-  parentId?: number;
-}
-
-// 선호도 등록 요청 (GUEST -> MEMBER)
-export interface PreferenceRegisterRequest {
-  categoryTopicId: number;
-  difficulty: Difficulty;
-}
-
-// 선호도 수정 요청
-export interface PreferenceUpdateRequest {
-  categoryTopicId: number;
-  difficulty: Difficulty;
-}
-
 // 오늘의 문제 응답
 export interface TodayProblemResponse {
   id: number;
