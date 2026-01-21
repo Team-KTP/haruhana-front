@@ -1,4 +1,11 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import Dashboard from '../pages/Dashboard';
+import Login from '../pages/Login';
+import Signup from '../pages/Signup';
+import History from '../pages/History';
+import ProblemSolve from '../pages/ProblemSolve';
+import ProtectedRoute from '../components/features/auth/ProtectedRoute';
+import AuthRedirect from '../components/features/auth/AuthRedirect';
 
 // 임시 컴포넌트 (나중에 실제 페이지로 교체)
 const TempPage = ({ title }: { title: string }) => (
@@ -13,13 +20,49 @@ const TempPage = ({ title }: { title: string }) => (
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<TempPage title="로그인" />} />
-      <Route path="/signup" element={<TempPage title="회원가입" />} />
-      <Route path="/preference-setup" element={<TempPage title="초기 설정" />} />
-      <Route path="/today" element={<TempPage title="오늘의 문제" />} />
-      <Route path="/records" element={<TempPage title="내 기록" />} />
-      <Route path="/settings" element={<TempPage title="설정" />} />
+      {/* 공개 라우트 */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+
+      {/* 루트 경로 - 로그인 시 대시보드로 리다이렉트 */}
+      <Route path="/" element={<AuthRedirect />} />
+
+      {/* MEMBER 전용 라우트 */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute requireRole="ROLE_MEMBER">
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/records"
+        element={
+          <ProtectedRoute requireRole="ROLE_MEMBER">
+            <History />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/problem/:id"
+        element={
+          <ProtectedRoute requireRole="ROLE_MEMBER">
+            <ProblemSolve />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute requireRole="ROLE_MEMBER">
+            <TempPage title="설정" />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* 404 리다이렉트 */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
