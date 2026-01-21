@@ -5,8 +5,6 @@ import {
   DailyProblemDetailResponse,
   SubmitSolutionRequest,
   SubmissionResponse,
-  PreferenceRegisterRequest,
-  PreferenceUpdateRequest,
 } from '../types/problem';
 import { ApiResponse } from '../types/common';
 
@@ -58,20 +56,4 @@ export const submitSolution = async (
     data
   );
   return response.data.data;
-};
-
-/**
- * 사용자 선호도 등록 API (GUEST → MEMBER 전환)
- * POST /v1/members/preferences
- */
-export const registerPreference = async (data: PreferenceRegisterRequest): Promise<void> => {
-  await client.post('/v1/members/preferences', data);
-};
-
-/**
- * 사용자 선호도 수정 API
- * PATCH /v1/members/preferences
- */
-export const updatePreference = async (data: PreferenceUpdateRequest): Promise<void> => {
-  await client.patch('/v1/members/preferences', data);
 };
