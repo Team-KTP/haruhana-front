@@ -86,37 +86,37 @@ export default function History() {
 
   return (
     <Layout user={user} activeTab="history" onNavigate={handleNavigate} onLogout={logout}>
-      <div className="animate-fade-in space-y-4 sm:space-y-6 pb-20">
+      <div className="animate-fade-in space-y-3 sm:space-y-5 pb-20">
         <div>
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800">나의 기록</h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">날짜를 선택하여 문제를 확인하세요.</p>
+          <h2 className="text-lg sm:text-xl font-bold text-slate-800">나의 기록</h2>
+          <p className="text-xs text-slate-500 mt-1">날짜를 선택하여 문제를 확인하세요.</p>
         </div>
 
         {/* 캘린더 - 반응형 */}
-        <Card className="!p-3 sm:!p-4 lg:!p-5 shrink-0">
+        <Card className="!p-2.5 sm:!p-3.5 shrink-0">
           <div className="flex justify-between items-center mb-3 sm:mb-4">
             <button onClick={handlePrevMonth} className="p-1 sm:p-2 text-slate-400 hover:text-slate-600 transition-colors">
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <h3 className="font-bold text-sm sm:text-base lg:text-lg text-slate-700">
+            <h3 className="font-bold text-sm sm:text-base text-slate-700">
               {currentMonth.getFullYear()}년 {currentMonth.getMonth() + 1}월
             </h3>
             <button onClick={handleNextMonth} className="p-1 sm:p-2 text-slate-400 hover:text-slate-600 transition-colors">
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
 
-          <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center mb-1 sm:mb-2">
+          <div className="grid grid-cols-7 gap-1 sm:gap-1.5 text-center mb-1 sm:mb-2">
             {['일', '월', '화', '수', '목', '금', '토'].map(d => (
               <div key={d} className="text-[10px] sm:text-xs font-bold text-slate-300 py-1 uppercase">{d}</div>
             ))}
           </div>
 
-          <div className="grid grid-cols-7 gap-1 sm:gap-2">
+          <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
             {days.map((date, idx) => {
               if (!date) return <div key={`empty-${idx}`}></div>;
 
@@ -152,12 +152,12 @@ export default function History() {
 
         {/* 선택된 날짜 문제 표시 - 반응형 */}
         <div className="flex-1 min-h-0 flex flex-col">
-          <div className="flex items-center justify-between mb-3 sm:mb-4">
-            <h3 className="font-bold text-slate-800 text-sm sm:text-base">
+          <div className="flex items-center justify-between mb-2.5 sm:mb-3">
+            <h3 className="font-bold text-slate-800 text-sm">
               {selectedDate ? `${selectedDate} 문제` : '오늘의 문제'}
             </h3>
             {selectedDate && (
-              <button onClick={handleResetToToday} className="text-xs sm:text-sm text-haru-600 font-medium hover:text-haru-700 transition-colors">
+              <button onClick={handleResetToToday} className="text-xs text-haru-600 font-medium hover:text-haru-700 transition-colors">
                 오늘로 돌아가기
               </button>
             )}
@@ -165,40 +165,40 @@ export default function History() {
 
           <div className="flex-1 overflow-y-auto custom-scrollbar">
             {isLoading ? (
-              <div className="text-center py-10 sm:py-12 text-slate-400 bg-white rounded-xl border border-slate-100">
-                <p className="text-xs sm:text-sm">로딩 중...</p>
+              <div className="text-center py-9 sm:py-10 text-slate-400 bg-white rounded-xl border border-slate-100">
+                <p className="text-xs">로딩 중...</p>
               </div>
             ) : !problem || problem.id === null ? (
-              <div className="text-center py-10 sm:py-12 lg:py-16 bg-white rounded-xl border border-slate-100">
-                <div className="text-4xl sm:text-5xl mb-3">📭</div>
-                <p className="text-sm sm:text-base font-medium text-slate-500">할당받은 문제가 없습니다</p>
-                <p className="text-xs sm:text-sm text-slate-400 mt-1">
+              <div className="text-center py-9 sm:py-10 bg-white rounded-xl border border-slate-100">
+                <div className="text-3xl sm:text-4xl mb-2.5">📭</div>
+                <p className="text-sm font-medium text-slate-500">할당받은 문제가 없습니다</p>
+                <p className="text-xs text-slate-400 mt-1">
                   {selectedDate ? `${selectedDate}에는` : '오늘은'} 배정된 문제가 없어요.
                 </p>
               </div>
             ) : (
               <div
-                className="bg-white p-4 sm:p-5 lg:p-6 rounded-xl border border-slate-100 shadow-sm flex flex-col gap-2 sm:gap-3 cursor-pointer hover:border-haru-200 transition-all active:scale-[0.98]"
+                className="bg-white p-3 sm:p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col gap-2 cursor-pointer hover:border-haru-200 transition-all active:scale-[0.98]"
                 onClick={() => handleItemClick(problem.id)}
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2 mb-1 sm:mb-2">
-                      <span className="bg-haru-50 text-haru-600 text-[10px] sm:text-xs font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded uppercase">
+                    <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                      <span className="bg-haru-50 text-haru-600 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded uppercase">
                         {problem.categoryTopic}
                       </span>
-                      <span className="bg-slate-100 text-slate-500 text-[10px] sm:text-xs font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded uppercase">
+                      <span className="bg-slate-100 text-slate-500 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded uppercase">
                         {difficultyLabels[problem.difficulty] || problem.difficulty}
                       </span>
                       {problem.isSolved ? (
-                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-green-50 text-green-600 text-[10px] sm:text-xs font-bold rounded">✓ 완료</span>
+                        <span className="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] sm:text-xs font-bold rounded">✓ 완료</span>
                       ) : (
-                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-slate-100 text-slate-400 text-[10px] sm:text-xs font-bold rounded">미완료</span>
+                        <span className="px-2 py-0.5 bg-slate-100 text-slate-400 text-[10px] sm:text-xs font-bold rounded">미완료</span>
                       )}
                     </div>
-                    <h3 className="font-bold text-slate-800 text-sm sm:text-base lg:text-lg truncate">{problem.title}</h3>
+                    <h3 className="font-bold text-slate-800 text-sm sm:text-base truncate">{problem.title}</h3>
                   </div>
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-slate-300 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-slate-300 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>

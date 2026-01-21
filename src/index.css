@@ -3,9 +3,26 @@
 @tailwind utilities;
 
 @layer base {
+  /* PWA 최적화: 터치 액션 및 뷰포트 설정 */
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
+
   body {
     @apply bg-slate-50 text-slate-800;
-    font-family: Pretendard, sans-serif;
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none; /* PWA: 당겨서 새로고침 방지 */
+  }
+
+  /* 모바일 환경 대응 */
+  @media (max-width: 640px) {
+    body {
+      font-size: 14px;
+    }
   }
 
   /* Screen reader only */
@@ -30,5 +47,171 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+}
+
+/* Syntax highlighting for code blocks (highlight.js default theme) */
+@layer components {
+  /* 반응형 커스텀 스크롤바 */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  /* 애니메이션 */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  /* 반응형 Input 스타일 */
+  .input-field {
+    @apply w-full px-3 py-2 sm:px-4 sm:py-2.5 border border-slate-200 rounded-xl
+           focus:outline-none focus:ring-2 focus:ring-haru-500 focus:border-transparent
+           transition-all text-sm sm:text-base;
+  }
+
+  .input-field.input-sm {
+    @apply px-2.5 py-1.5 text-xs sm:text-sm;
+  }
+
+  .input-field.input-lg {
+    @apply px-4 py-3 sm:px-5 sm:py-3.5 text-base sm:text-lg;
+  }
+
+  .input-field.input-error {
+    @apply border-red-300 focus:ring-red-500;
+  }
+
+  /* 뱃지 스타일 */
+  .badge {
+    @apply px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wide;
+  }
+
+  .badge-primary {
+    @apply bg-haru-100 text-haru-700;
+  }
+
+  .badge-secondary {
+    @apply bg-slate-100 text-slate-600;
+  }
+
+  /* 그라디언트 텍스트 */
+  .gradient-text {
+    @apply bg-gradient-to-r from-haru-500 to-haru-600 bg-clip-text text-transparent;
+  }
+
+  /* 하이라이트 코드 블록 - 반응형 */
+  .hljs {
+    @apply block overflow-x-auto p-3 sm:p-4 rounded-lg text-xs sm:text-sm;
+  }
+
+  .hljs-comment,
+  .hljs-quote {
+    @apply text-slate-500 italic;
+  }
+
+  .hljs-variable,
+  .hljs-template-variable,
+  .hljs-tag,
+  .hljs-name,
+  .hljs-selector-id,
+  .hljs-selector-class,
+  .hljs-regexp,
+  .hljs-deletion {
+    @apply text-red-400;
+  }
+
+  .hljs-number,
+  .hljs-built_in,
+  .hljs-builtin-name,
+  .hljs-literal,
+  .hljs-type,
+  .hljs-params,
+  .hljs-meta,
+  .hljs-link {
+    @apply text-orange-400;
+  }
+
+  .hljs-attribute {
+    @apply text-yellow-400;
+  }
+
+  .hljs-string,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-addition {
+    @apply text-green-400;
+  }
+
+  .hljs-title,
+  .hljs-section {
+    @apply text-blue-400 font-semibold;
+  }
+
+  .hljs-keyword,
+  .hljs-selector-tag {
+    @apply text-purple-400 font-semibold;
+  }
+
+  .hljs-emphasis {
+    @apply italic;
+  }
+
+  .hljs-strong {
+    @apply font-bold;
+  }
+}
+
+/* 유틸리티 클래스 */
+@layer utilities {
+  /* Safe Area 대응 (iOS 노치 등) */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* 반응형 컨테이너 */
+  .container-responsive {
+    @apply w-full max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
