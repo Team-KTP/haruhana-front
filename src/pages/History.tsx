@@ -16,13 +16,10 @@ export default function History() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  // 선택된 날짜 (null이면 오늘 날짜 기준으로 조회)
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  // 선택된 날짜 또는 undefined(오늘)로 API 호출
   const { problem, isLoading } = useDailyProblem(selectedDate);
 
-  // 월별 문제 데이터 (캘린더 점 표시용, 회원 가입일 이후만 조회)
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth() + 1;
   const { problemsMap } = useMonthlyProblems(year, month, user?.createdAt);
@@ -53,7 +50,6 @@ export default function History() {
   const handleDateClick = (date: Date) => {
     const dateStr = format(date, 'yyyy-MM-dd');
     if (selectedDate === dateStr) {
-      // 같은 날짜 다시 클릭하면 오늘로 리셋
       setSelectedDate(null);
     } else {
       setSelectedDate(dateStr);
@@ -77,7 +73,6 @@ export default function History() {
     setCurrentMonth(new Date());
   };
 
-  // 오늘 날짜
   const today = format(new Date(), 'yyyy-MM-dd');
 
   if (!user) {
@@ -92,7 +87,7 @@ export default function History() {
           <p className="text-xs text-slate-500 mt-1">날짜를 선택하여 문제를 확인하세요.</p>
         </div>
 
-        {/* 캘린더 - 반응형 */}
+        {/* 캘린더 - 기존 디자인 유지 */}
         <Card className="!p-2.5 sm:!p-3.5 shrink-0">
           <div className="flex justify-between items-center mb-3 sm:mb-4">
             <button onClick={handlePrevMonth} className="p-1 sm:p-2 text-slate-400 hover:text-slate-600 transition-colors">
@@ -125,7 +120,6 @@ export default function History() {
               const isToday = dateStr === today;
               const isCurrentSelection = selectedDate === null && isToday;
 
-              // 해당 날짜의 문제 상태 확인
               const problemStatus = problemsMap.get(dateStr);
               const hasProblem = !!problemStatus;
               const isSolved = problemStatus?.isSolved ?? false;
@@ -140,7 +134,6 @@ export default function History() {
                   `}
                 >
                   {date.getDate()}
-                  {/* 문제가 있는 날짜에 점 표시 */}
                   {hasProblem && !(isSelected || isCurrentSelection) && (
                     <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full mt-0.5 ${isSolved ? 'bg-haru-500' : 'bg-slate-100'}`}></div>
                   )}
@@ -150,7 +143,7 @@ export default function History() {
           </div>
         </Card>
 
-        {/* 선택된 날짜 문제 표시 - 반응형 */}
+        {/* 선택된 날짜 문제 표시 */}
         <div className="flex-1 min-h-0 flex flex-col">
           <div className="flex items-center justify-between mb-2.5 sm:mb-3">
             <h3 className="font-bold text-slate-800 text-sm">
