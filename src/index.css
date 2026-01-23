@@ -4,10 +4,13 @@
 
 @layer base {
   /* PWA 최적화: 터치 액션 및 뷰포트 설정 */
+  /* 최소 너비: iPhone 6s 기준 (375px) */
   html {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     touch-action: manipulation;
+    min-width: 375px;
+    overflow-x: hidden;
   }
 
   body {
@@ -16,6 +19,13 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior-y: none; /* PWA: 당겨서 새로고침 방지 */
+    min-width: 375px;
+    overflow-x: hidden;
+  }
+
+  #root {
+    min-width: 375px;
+    overflow-x: hidden;
   }
 
   /* 모바일 환경 대응 */

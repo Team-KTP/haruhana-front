@@ -4,16 +4,13 @@ import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Layout } from '../components/common/Layout';
 import { MarkdownRenderer } from '../components/common/MarkdownRenderer';
+import { ErrorModal } from '../components/common/ErrorModal';
 import { useAuth } from '../hooks/useAuth';
 import { useProblemDetail, useSubmitSolution } from '../hooks/useProblem';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-
-const difficultyLabels: Record<string, string> = {
-  EASY: '쉬움',
-  MEDIUM: '보통',
-  HARD: '어려움',
-};
+import { DIFFICULTY_LABELS } from '../constants';
+import { useErrorModal } from '../hooks/useErrorModal';
 
 export default function ProblemSolve() {
   const queryClient = useQueryClient();
@@ -24,6 +21,7 @@ export default function ProblemSolve() {
 
   const { problemDetail, isLoading, error } = useProblemDetail(dailyProblemId);
   const { submit, isSubmitting, data: submissionData } = useSubmitSolution(dailyProblemId);
+  const { modalState, showError, closeModal } = useErrorModal();
 
   const [answer, setAnswer] = useState('');
   const [isEditing, setIsEditing] = useState(false);
@@ -50,7 +48,7 @@ export default function ProblemSolve() {
 
   const handleSubmit = () => {
     if (answer.trim().length < 5) {
-      alert('답변은 최소 5자 이상 입력해주세요.');
+      showError('답변은 최소 5자 이상 입력해주세요.');
       return;
     }
     submit(answer, {
@@ -125,7 +123,7 @@ export default function ProblemSolve() {
               {problemDetail.categoryTopic}
             </span>
             <span className="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase">
-              {difficultyLabels[problemDetail.difficulty] || problemDetail.difficulty}
+              {DIFFICULTY_LABELS[problemDetail.difficulty] || problemDetail.difficulty}
             </span>
             {isAlreadySubmitted && (
               <span className="bg-green-50 text-green-600 text-[10px] font-bold px-2 py-0.5 rounded">
@@ -260,6 +258,14 @@ export default function ProblemSolve() {
           </div>
         )}
       </div>
+
+      <ErrorModal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+      />
     </Layout>
   );
 }

@@ -1,20 +1,17 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { ErrorModal } from '../components/common/ErrorModal';
 import { signup } from '../api/auth';
 import { MemberCreateRequest } from '../types/auth';
 import { Difficulty } from '../types/common';
+import { DIFFICULTY_OPTIONS } from '../constants';
 import { useCategories } from '../hooks/usePreference';
+import { useErrorModal } from '../hooks/useErrorModal';
+import { getErrorMessage } from '../utils/errorHandler';
 import Loading from '../components/common/Loading';
-
-const difficultyOptions: { value: Difficulty; label: string; description: string; icon: string }[] = [
-  { value: 'EASY', label: '쉬움', description: '기본 개념 위주', icon: '🌱' },
-  { value: 'MEDIUM', label: '보통', description: '실무 응용 수준', icon: '🌿' },
-  { value: 'HARD', label: '어려움', description: '심화 문제', icon: '🌳' },
-];
 
 export default function Signup() {
   // Step 1: Account info
@@ -29,10 +26,9 @@ export default function Signup() {
   const [openCategoryId, setOpenCategoryId] = useState<number | null>(null);
   const [openGroupId, setOpenGroupId] = useState<number | null>(null);
 
-  const [error, setError] = useState('');
   const navigate = useNavigate();
-
   const { categoryData, isLoading: categoriesLoading } = useCategories();
+  const { modalState, showError, closeModal } = useErrorModal();
 
   const signupMutation = useMutation({
     mutationFn: (data: MemberCreateRequest) => signup(data),
@@ -42,32 +38,27 @@ export default function Signup() {
     },
     onError: (err: unknown) => {
       console.error('Signup error:', err);
-      if (err instanceof AxiosError) {
-        setError(err.response?.data?.error?.message || '회원가입 중 오류가 발생했습니다.');
-      } else {
-        setError('회원가입 중 오류가 발생했습니다.');
-      }
+      showError(getErrorMessage(err));
     },
   });
 
   const handleStep1Submit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
 
     if (!loginId.trim() || !password.trim() || !nickname.trim()) {
-      setError('모든 필드를 입력해주세요.');
+      showError('모든 필드를 입력해주세요.');
       return;
     }
 
     // API 스펙: 최소 8자, 영문 대소문자 및 숫자 포함
     if (password.length < 8) {
-      setError('비밀번호는 최소 8자 이상이어야 합니다.');
+      showError('비밀번호는 최소 8자 이상이어야 합니다.');
       return;
     }
 
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
     if (!passwordPattern.test(password)) {
-      setError('비밀번호는 영문 대소문자와 숫자를 포함해야 합니다.');
+      showError('비밀번호는 영문 대소문자와 숫자를 포함해야 합니다.');
       return;
     }
 
@@ -77,10 +68,9 @@ export default function Signup() {
 
   const handleStep2Submit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
 
     if (!selectedCategoryTopicId || !selectedDifficulty) {
-      setError('학습 주제와 난이도를 모두 선택해주세요.');
+      showError('학습 주제와 난이도를 모두 선택해주세요.');
       return;
     }
 
@@ -148,12 +138,6 @@ export default function Signup() {
       {step === 1 && (
         <Card className="w-full max-w-sm sm:max-w-md">
           <form onSubmit={handleStep1Submit} className="space-y-6">
-            {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
-                {error}
-              </div>
-            )}
-
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">아이디</label>
               <input
@@ -207,12 +191,6 @@ export default function Signup() {
       {step === 2 && (
         <Card className="w-full max-w-3xl">
           <form onSubmit={handleStep2Submit} className="space-y-8">
-            {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
-                {error}
-              </div>
-            )}
-
             {/* 선택된 주제 표시 */}
             {selectedInfo && (
               <div className="p-4 bg-gradient-to-r from-haru-50 to-haru-100/50 border border-haru-200 rounded-xl">
@@ -318,7 +296,7 @@ export default function Signup() {
                 🎯 난이도 선택
               </label>
               <div className="grid grid-cols-3 gap-3">
-                {difficultyOptions.map((option) => (
+                {DIFFICULTY_OPTIONS.map((option) => (
                   <button
                     key={option.value}
                     type="button"
@@ -367,6 +345,14 @@ export default function Signup() {
           </form>
         </Card>
       )}
+
+      <ErrorModal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+      />
     </div>
   );
 }

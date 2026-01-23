@@ -3,18 +3,21 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { ErrorModal } from '../components/common/ErrorModal';
 import { login as loginApi } from '../api/auth';
 import { LoginRequest, User } from '../types/auth';
 import { getRoleFromToken } from '../utils/token';
+import { useErrorModal } from '../hooks/useErrorModal';
+import { getErrorMessage } from '../utils/errorHandler';
 
 export default function Login() {
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
+  const { modalState, showError, closeModal } = useErrorModal();
 
   // 회원가입 후 전달된 메시지 표시
   useEffect(() => {
@@ -55,21 +58,15 @@ export default function Login() {
     },
     onError: (err: unknown) => {
       console.error('Login error:', err);
-      if (err && typeof err === 'object' && 'response' in err) {
-        const axiosError = err as { response?: { data?: { error?: { message?: string } } } };
-        setError(axiosError.response?.data?.error?.message || '로그인에 실패했습니다.');
-      } else {
-        setError('로그인에 실패했습니다.');
-      }
+      showError(getErrorMessage(err));
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
 
     if (!loginId.trim() || !password.trim()) {
-      setError('아이디와 비밀번호를 입력해주세요.');
+      showError('아이디와 비밀번호를 입력해주세요.');
       return;
     }
 
@@ -91,11 +88,6 @@ export default function Login() {
           {successMessage && (
             <div className="p-3 sm:p-4 bg-green-50 border border-green-200 rounded-lg text-xs sm:text-sm text-green-600">
               {successMessage}
-            </div>
-          )}
-          {error && (
-            <div className="p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg text-xs sm:text-sm text-red-600">
-              {error}
             </div>
           )}
 
@@ -143,6 +135,13 @@ export default function Login() {
           </Link>
         </div>
       </Card>
+      <ErrorModal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+      />
     </div>
   );
 }

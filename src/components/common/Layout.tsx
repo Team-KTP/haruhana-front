@@ -11,7 +11,7 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children, user, activeTab, onNavigate }) => {
   return (
-    <div className="h-screen bg-slate-50 flex flex-col">
+    <div className="h-screen bg-slate-50 flex flex-col min-w-[375px]">
       {/* Fixed Header - 반응형 */}
       <header className="shrink-0 h-14 sm:h-16 bg-white border-b border-slate-100 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-10">
         <div
@@ -33,8 +33,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, activeTab, onNav
       </header>
 
       {/* Main Area - 반응형 컨테이너 */}
-      <main className="flex-1 overflow-y-auto custom-scrollbar p-3 sm:p-5 lg:p-7 pb-24 lg:ml-64">
-        <div className="max-w-sm lg:max-w-xl mx-auto h-full">
+      <main className="flex-1 overflow-y-auto custom-scrollbar p-3 sm:p-5 lg:p-7 pb-24 lg:pb-7 lg:ml-64 min-w-0">
+        <div className="max-w-md sm:max-w-lg lg:max-w-2xl mx-auto h-full min-w-0">
           {children}
         </div>
       </main>

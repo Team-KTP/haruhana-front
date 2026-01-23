@@ -5,12 +5,7 @@ import { Card } from '../components/common/Card';
 import { useAuth } from '../hooks/useAuth';
 import { useDailyProblem, useMonthlyProblems } from '../hooks/useHistory';
 import { format } from 'date-fns';
-
-const difficultyLabels: Record<string, string> = {
-  EASY: '쉬움',
-  MEDIUM: '보통',
-  HARD: '어려움',
-};
+import { DIFFICULTY_LABELS } from '../constants';
 
 export default function History() {
   const navigate = useNavigate();
@@ -181,7 +176,7 @@ export default function History() {
                         {problem.categoryTopic}
                       </span>
                       <span className="bg-slate-100 text-slate-500 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded uppercase">
-                        {difficultyLabels[problem.difficulty] || problem.difficulty}
+                        {DIFFICULTY_LABELS[problem.difficulty] || problem.difficulty}
                       </span>
                       {problem.isSolved ? (
                         <span className="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] sm:text-xs font-bold rounded">✓ 완료</span>

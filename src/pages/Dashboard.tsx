@@ -6,12 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useStreak } from '../hooks/useStreak';
 import { useTodayProblem } from '../hooks/useProblem';
 import { format } from 'date-fns';
-
-const difficultyLabels: Record<string, string> = {
-  EASY: '쉬움',
-  MEDIUM: '보통',
-  HARD: '어려움',
-};
+import { DIFFICULTY_LABELS } from '../constants';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -111,7 +106,7 @@ export default function Dashboard() {
               <svg className="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
-              난이도: {difficultyLabels[user.difficulty] || user.difficulty}
+              난이도: {DIFFICULTY_LABELS[user.difficulty] || user.difficulty}
             </span>
           </div>
         )}
@@ -145,7 +140,7 @@ export default function Dashboard() {
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
                     </svg>
-                    {difficultyLabels[problem.difficulty] || problem.difficulty}
+                    {DIFFICULTY_LABELS[problem.difficulty] || problem.difficulty}
                   </span>
                   {problem.isSolved && (
                     <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 text-[10px] sm:text-xs font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg">

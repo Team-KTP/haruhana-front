@@ -10,6 +10,15 @@ export const formatDateTime = (date: Date | string): string => {
   return formatDate(date, 'yyyy-MM-dd HH:mm:ss');
 };
 
+export const formatJoinDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+
 export const isToday = (date: Date | string): boolean => {
   const dateObj = typeof date === 'string' ? parseISO(date) : date;
   return isSameDay(dateObj, new Date());

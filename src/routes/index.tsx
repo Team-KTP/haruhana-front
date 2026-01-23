@@ -7,19 +7,6 @@ import ProblemSolve from '../pages/ProblemSolve';
 import ProtectedRoute from '../components/features/auth/ProtectedRoute';
 import AuthRedirect from '../components/features/auth/AuthRedirect';
 import MyPage from '../pages/MyPage';
-// import Settings from '../pages/Settings';
-
-
-// 임시 컴포넌트 (나중에 실제 페이지로 교체)
-const TempPage = ({ title }: { title: string }) => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
-    <div className="text-center">
-      <h1 className="text-4xl font-bold text-primary-600 mb-4">{title}</h1>
-      <p className="text-gray-600">HaruHaru 프론트엔드 프로젝트가 초기화되었습니다.</p>
-    </div>
-  </div>
-);
-
 const AppRoutes = () => {
   return (
     <Routes>
