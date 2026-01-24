@@ -34,7 +34,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, activeTab, onNav
 
       {/* Main Area - 반응형 컨테이너 */}
       <main className="flex-1 overflow-y-auto custom-scrollbar p-3 sm:p-5 lg:p-7 pb-24 lg:pb-7 lg:ml-64 min-w-0">
-        <div className="max-w-md sm:max-w-lg lg:max-w-2xl mx-auto h-full min-w-0">
+        <div className="max-w-md sm:max-w-lg lg:max-w-2xl mx-auto min-w-0">
           {children}
         </div>
       </main>
