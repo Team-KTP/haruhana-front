@@ -38,8 +38,6 @@ export default function Login() {
 
       // 토큰에서 역할 추출
       const role = getRoleFromToken(tokenResponse.accessToken);
-      console.log('User role after login:', role);
-      console.log('Login ID:', loginId);
 
       if (role) {
         // React Query 캐시에 임시 사용자 데이터 즉시 설정

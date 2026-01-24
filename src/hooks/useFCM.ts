@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MessagePayload } from 'firebase/messaging';
 import { getFCMToken, onForegroundMessage, isNotificationSupported, getNotificationPermission } from '../firebase/fcm';
+import { logger } from '../utils/logger';
 
 interface UseFCMReturn {
   token: string | null;
@@ -20,7 +21,7 @@ export const useFCM = (): UseFCMReturn => {
   // 토큰 요청 함수
   const requestPermission = async (): Promise<string | null> => {
     if (!isSupported) {
-      console.warn('Push notifications are not supported in this browser');
+      logger.warn('Push notifications are not supported in this browser');
       return null;
     }
 
@@ -49,16 +50,14 @@ export const useFCM = (): UseFCMReturn => {
   useEffect(() => {
     if (!isSupported || !token) return;
 
-    console.log('[useFCM] Setting up foreground message listener');
+    logger.log('[useFCM] Setting up foreground message listener');
 
     const unsubscribe = onForegroundMessage((payload: MessagePayload) => {
-      console.log('[useFCM] Foreground message received:', payload);
+      logger.log('[useFCM] Foreground message received:', payload.notification?.title);
 
       // 알림 표시
       if (payload.notification) {
         const { title, body, icon } = payload.notification;
-
-        console.log('[useFCM] Displaying notification:', { title, body });
 
         // 브라우저 알림 표시
         if (Notification.permission === 'granted') {
@@ -73,7 +72,6 @@ export const useFCM = (): UseFCMReturn => {
 
           // 알림 클릭 이벤트
           notification.onclick = () => {
-            console.log('[useFCM] Notification clicked');
             window.focus();
             notification.close();
 
@@ -83,7 +81,7 @@ export const useFCM = (): UseFCMReturn => {
             }
           };
         } else {
-          console.warn('[useFCM] Notification permission not granted');
+          logger.warn('[useFCM] Notification permission not granted');
         }
       }
 

@@ -1,5 +1,6 @@
 import { initializeApp, FirebaseApp } from 'firebase/app';
 import { getMessaging, Messaging } from 'firebase/messaging';
+import { logger } from '../utils/logger';
 
 // Firebase 설정 - 환경변수에서 가져오기
 const firebaseConfig = {
@@ -36,23 +37,22 @@ if (isFirebaseConfigured()) {
       // Service Worker 등록
       navigator.serviceWorker
         .register('/firebase-messaging-sw.js')
-        .then((registration) => {
-          console.log('[Firebase] Service Worker registered:', registration);
+        .then(() => {
+          logger.log('[Firebase] Service Worker registered');
           if (app) {
             messaging = getMessaging(app);
           }
         })
         .catch((error) => {
-          console.error('[Firebase] Service Worker registration failed:', error);
+          logger.error('[Firebase] Service Worker registration failed:', error);
         });
     }
-    console.log('[Firebase] Firebase initialized successfully');
+    logger.log('[Firebase] Firebase initialized successfully');
   } catch (error) {
-    console.error('[Firebase] Failed to initialize Firebase:', error);
+    logger.error('[Firebase] Failed to initialize Firebase:', error);
   }
 } else {
-  console.warn('[Firebase] Firebase configuration is incomplete. FCM features will be disabled.');
-  console.warn('[Firebase] Please add Firebase configuration to .env file. See .env.example for details.');
+  logger.warn('[Firebase] Firebase configuration is incomplete. FCM features will be disabled.');
 }
 
 export { app, messaging, isFirebaseConfigured };

@@ -1,10 +1,11 @@
 import { getToken, onMessage, MessagePayload } from 'firebase/messaging';
 import { messaging, isFirebaseConfigured } from './config';
+import { logger } from '../utils/logger';
 
 // FCM 토큰 가져오기
 export const getFCMToken = async (): Promise<string | null> => {
   if (!messaging || !isFirebaseConfigured()) {
-    console.warn('[FCM] FCM is not available - Firebase not configured properly');
+    logger.warn('[FCM] FCM is not available - Firebase not configured properly');
     return null;
   }
 
@@ -13,7 +14,7 @@ export const getFCMToken = async (): Promise<string | null> => {
     const permission = await Notification.requestPermission();
 
     if (permission !== 'granted') {
-      console.log('Notification permission denied');
+      logger.log('[FCM] Notification permission denied');
       return null;
     }
 
@@ -23,14 +24,14 @@ export const getFCMToken = async (): Promise<string | null> => {
     });
 
     if (token) {
-      console.log('FCM Token:', token);
+      logger.log('[FCM] Token generated successfully');
       return token;
     } else {
-      console.log('No registration token available');
+      logger.log('[FCM] No registration token available');
       return null;
     }
   } catch (error) {
-    console.error('Error getting FCM token:', error);
+    logger.error('[FCM] Error getting FCM token:', error);
     return null;
   }
 };
@@ -38,12 +39,12 @@ export const getFCMToken = async (): Promise<string | null> => {
 // 포그라운드 메시지 리스너 설정
 export const onForegroundMessage = (callback: (payload: MessagePayload) => void) => {
   if (!messaging || !isFirebaseConfigured()) {
-    console.warn('[FCM] FCM is not available - Firebase not configured properly');
+    logger.warn('[FCM] FCM is not available - Firebase not configured properly');
     return () => {};
   }
 
   return onMessage(messaging, (payload) => {
-    console.log('Foreground message received:', payload);
+    logger.log('[FCM] Foreground message received');
     callback(payload);
   });
 };

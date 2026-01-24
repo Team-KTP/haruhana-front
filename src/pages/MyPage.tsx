@@ -80,7 +80,6 @@ const MyPage: React.FC = () => {
   const handleSaveProfile = () => {
     // TODO: API 연동하여 프로필 업데이트
     if (editedNickname.trim()) {
-      console.log('Save profile:', { nickname: editedNickname, profileImage });
       setIsEditingProfile(false);
     }
   };
