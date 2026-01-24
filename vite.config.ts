@@ -9,7 +9,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'robots.txt', 'icons/*.png'],
+      includeAssets: ['favicon.ico', 'robots.txt', 'icons/*.png', 'firebase-messaging-sw.js'],
       manifest: {
         name: 'HaruHaru',
         short_name: 'HaruHaru',
@@ -32,6 +32,9 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // Firebase Messaging Service Worker와 충돌하지 않도록 설정
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+        globIgnores: ['**/firebase-messaging-sw.js'], // Firebase SW 제외
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/api\..*/i,
