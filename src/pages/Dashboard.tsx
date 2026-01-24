@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { Layout } from '../components/common/Layout';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
@@ -29,8 +29,9 @@ export default function Dashboard() {
     }
   };
 
+  // 인증이 안 된 경우 로그인 화면으로 강제 이동
   if (!user) {
-    return null;
+    return <Navigate to="/login" replace />;
   }
 
   return (

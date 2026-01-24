@@ -63,16 +63,20 @@ export function useAuth() {
   const logoutMutation = useMutation({
     mutationFn: logoutApi,
     onSuccess: () => {
+      // FCM 토큰 등 인증 관련 로컬 데이터도 삭제
+      localStorage.removeItem('fcm_token');
+      sessionStorage.removeItem('fcm_permission_dismissed');
       // 캐시 초기화
       queryClient.setQueryData(['auth', 'user'], null);
       queryClient.clear();
-
       // 로그인 페이지로 이동
       navigate('/login');
     },
     onError: (error) => {
       console.error('Logout error:', error);
-      // 에러가 발생해도 로컬 토큰은 삭제하고 로그인 페이지로 이동
+      // 에러가 발생해도 로컬 토큰/FCM 등 삭제하고 로그인 페이지로 이동
+      localStorage.removeItem('fcm_token');
+      sessionStorage.removeItem('fcm_permission_dismissed');
       queryClient.setQueryData(['auth', 'user'], null);
       navigate('/login');
     },
