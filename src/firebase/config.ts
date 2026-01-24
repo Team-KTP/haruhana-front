@@ -32,13 +32,15 @@ if (isFirebaseConfigured()) {
     app = initializeApp(firebaseConfig);
 
     // Messaging 인스턴스 (브라우저에서만 사용 가능)
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator && app) {
       // Service Worker 등록
       navigator.serviceWorker
         .register('/firebase-messaging-sw.js')
         .then((registration) => {
           console.log('[Firebase] Service Worker registered:', registration);
-          messaging = getMessaging(app);
+          if (app) {
+            messaging = getMessaging(app);
+          }
         })
         .catch((error) => {
           console.error('[Firebase] Service Worker registration failed:', error);
